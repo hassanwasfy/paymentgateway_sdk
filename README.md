@@ -1,3 +1,5 @@
 # paymentgateway_sdk
 
-## Current version is 0.0.1
+## Edfapay payment gateway SDK guide
+
+## Current version is v
