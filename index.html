@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="PaymentGateway SDK — Android (Gradle) + iOS (SPM) distribution and integration guide." />
+  <title>PaymentGateway SDK — Android & iOS Integration</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: #101828;
+      --text: #e6e9ef;
+      --muted: #b8c0cc;
+      --border: #233044;
+      --accent: #7aa2f7;
+      --accent2: #9ece6a;
+      --warn: #f7768e;
+      --codebg: #0a0e16;
+      --shadow: rgba(0,0,0,.35);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      --radius: 14px;
+    }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(122,162,247,.22), transparent 55%),
+                  radial-gradient(900px 500px at 90% 10%, rgba(158,206,106,.18), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    header {
+      position: sticky; top: 0;
+      background: rgba(11,15,25,.75);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+    .wrap { max-width: 1050px; margin: 0 auto; padding: 18px 18px; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 12px;
+      font-weight: 700; letter-spacing: .2px;
+    }
+    .badge {
+      font-size: 12px; color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(16,24,40,.7);
+    }
+    nav {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      font-size: 14px;
+    }
+    nav a {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      color: var(--muted);
+    }
+    nav a:hover {
+      border-color: var(--border);
+      color: var(--text);
+      background: rgba(16,24,40,.55);
+      text-decoration: none;
+    }
+
+    .hero { padding: 28px 0 8px; }
+    h1 { margin: 0 0 8px; font-size: 34px; line-height: 1.15; }
+    .subtitle { color: var(--muted); margin: 0; max-width: 75ch; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      margin: 18px 0 30px;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: rgba(16,24,40,.78);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 26px var(--shadow);
+      overflow: hidden;
+    }
+    .card .hd {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .card .hd strong { font-size: 15px; }
+    .card .bd { padding: 16px; }
+    .pill {
+      font-size: 12px;
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(10,14,22,.35);
+      white-space: nowrap;
+    }
+    .k {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(122,162,247,.14);
+      border: 1px solid rgba(122,162,247,.35);
+      color: var(--text);
+      vertical-align: baseline;
+    }
+    .ok { color: var(--accent2); font-weight: 600; }
+    .warn { color: var(--warn); font-weight: 600; }
+
+    pre, code { font-family: var(--mono); }
+    pre {
+      margin: 12px 0;
+      padding: 12px 12px;
+      border-radius: 12px;
+      background: var(--codebg);
+      border: 1px solid var(--border);
+      overflow: auto;
+      font-size: 13px;
+    }
+    code.inline {
+      background: rgba(10,14,22,.55);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    h2 { margin: 0 0 10px; font-size: 22px; }
+    h3 { margin: 18px 0 8px; font-size: 16px; }
+    ul { margin: 10px 0 0 18px; color: var(--muted); }
+    li { margin: 6px 0; }
+    .note {
+      border-left: 3px solid rgba(122,162,247,.7);
+      padding: 10px 12px;
+      background: rgba(122,162,247,.08);
+      border-radius: 12px;
+      border: 1px solid rgba(122,162,247,.18);
+      color: var(--muted);
+      margin: 12px 0;
+    }
+    .danger {
+      border-left: 3px solid rgba(247,118,142,.75);
+      padding: 10px 12px;
+      background: rgba(247,118,142,.08);
+      border-radius: 12px;
+      border: 1px solid rgba(247,118,142,.18);
+      color: var(--muted);
+      margin: 12px 0;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(10,14,22,.25);
+      margin: 10px 0 0;
+    }
+    .table th, .table td {
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 14px;
+    }
+    .table th { text-align: left; color: var(--text); background: rgba(16,24,40,.65); }
+    .table td { color: var(--muted); }
+    footer {
+      padding: 30px 0 44px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 26px;
+    }
+    .small { font-size: 13px; color: var(--muted); }
+    .two {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px) {
+      .two { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap topbar">
+    <div class="brand">
+      <span>PaymentGateway SDK</span>
+      <span class="badge">Android + iOS</span>
+    </div>
+    <nav aria-label="Page navigation">
+      <a href="#quickstart">Quickstart</a>
+      <a href="#android">Android</a>
+      <a href="#ios">iOS</a>
+      <a href="#versions">Versions</a>
+      <a href="#troubleshooting">Troubleshooting</a>
+      <a href="#support">Support</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>Integration Guide</h1>
+    <p class="subtitle">
+      Public distribution repo for the <span class="k">PaymentGateway</span> SDK.
+      This page covers installation and verification steps for Android (Gradle) and iOS (Swift Package Manager).
+    </p>
+  </section>
+
+  <section class="grid" id="quickstart">
+    <div class="card">
+      <div class="hd">
+        <strong>Quickstart</strong>
+        <span class="pill">Copy/paste friendly</span>
+      </div>
+      <div class="bd">
+        <h3>Android</h3>
+        <pre><code>// settings.gradle(.kts) or build.gradle(.kts)
+repositories {
+  maven { url = uri("https://hassanwasfy.github.io/paymentgateway_sdk/maven/") }
+  mavenCentral()
+  google()
+}
+
+dependencies {
+  implementation("com.edfapay:paymentgateway:&lt;version&gt;")
+}</code></pre>
+
+        <h3>iOS (SPM)</h3>
+        <ol class="small">
+          <li>In Xcode: <span class="code inline">File → Add Packages…</span></li>
+          <li>Add package URL: <span class="code inline">https://github.com/hassanwasfy/paymentgateway_sdk</span></li>
+          <li>Choose the product <span class="code inline">PaymentGateway</span></li>
+        </ol>
+
+        <div class="note">
+          The iOS package uses a binary target. The <span class="code inline">Package.swift</span> file is updated per release with a new
+          <span class="code inline">url</span> and <span class="code inline">checksum</span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <strong>Distribution Endpoints</strong>
+        <span class="pill">Public</span>
+      </div>
+      <div class="bd">
+        <table class="table" role="table" aria-label="Distribution endpoints">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>What it serves</th>
+              <th>Base</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Android</strong></td>
+              <td>Maven repository (GitHub Pages)</td>
+              <td><span class="code inline">https://hassanwasfy.github.io/paymentgateway_sdk/maven/</span></td>
+            </tr>
+            <tr>
+              <td><strong>iOS</strong></td>
+              <td>SPM manifest + binary zip (GitHub Releases)</td>
+              <td><span class="code inline">https://github.com/hassanwasfy/paymentgateway_sdk</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Verification</h3>
+        <ul>
+          <li><strong>Android:</strong> a direct file URL should download (example POM):<br/>
+            <span class="code inline">.../maven/com/edfapay/paymentgateway/&lt;version&gt;/...</span>
+          </li>
+          <li><strong>iOS:</strong> the release asset must exist at:<br/>
+            <span class="code inline">.../releases/download/v&lt;version&gt;/PaymentGateway.xcframework.zip</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="android">
+    <div class="hd">
+      <strong>Android Setup (Gradle)</strong>
+      <span class="pill">Kotlin / Groovy</span>
+    </div>
+    <div class="bd">
+      <h2>Android</h2>
+
+      <h3>1) Add repository</h3>
+      <p class="small">Add the GitHub Pages Maven repository so Gradle can resolve the artifacts.</p>
+
+      <div class="two">
+        <div>
+          <p class="small"><strong>Kotlin DSL</strong> (<span class="code inline">build.gradle.kts</span>)</p>
+          <pre><code>repositories {
+  maven { url = uri("https://hassanwasfy.github.io/paymentgateway_sdk/maven/") }
+  mavenCentral()
+  google()
+}</code></pre>
+        </div>
+        <div>
+          <p class="small"><strong>Groovy</strong> (<span class="code inline">build.gradle</span>)</p>
+          <pre><code>repositories {
+  maven { url "https://hassanwasfy.github.io/paymentgateway_sdk/maven/" }
+  mavenCentral()
+  google()
+}</code></pre>
+        </div>
+      </div>
+
+      <h3>2) Add dependency</h3>
+      <pre><code>dependencies {
+  implementation("com.edfapay:paymentgateway:&lt;version&gt;")
+}</code></pre>
+
+      <h3>3) Basic usage</h3>
+      <div class="note">
+        Replace the placeholders below with your SDK’s real entrypoints (classes/methods).
+        This documentation does <em>not</em> assume API names that were not provided.
+      </div>
+      <pre><code>// Example only — replace with actual SDK API
+// import com.edfapay.paymentgateway.*
+
+// val sdk = PaymentGateway(/* ... */)
+// sdk.initialize(context)
+// sdk.startPayment(/* ... */)</code></pre>
+
+      <h3>4) Proguard / R8</h3>
+      <p class="small">
+        If your SDK exposes public APIs via reflection (serialization, DI, etc.), you may need keep rules.
+        Provide official rules from the SDK module if required.
+      </p>
+      <pre><code># If needed — replace with your real packages
+# -keep class com.edfapay.paymentgateway.** { *; }
+# -dontwarn com.edfapay.paymentgateway.**</code></pre>
+    </div>
+  </section>
+
+  <section class="card" id="ios" style="margin-top:18px;">
+    <div class="hd">
+      <strong>iOS Setup (Swift Package Manager)</strong>
+      <span class="pill">Binary Target</span>
+    </div>
+    <div class="bd">
+      <h2>iOS</h2>
+
+      <h3>1) Add the package in Xcode</h3>
+      <ol class="small">
+        <li>Open your project in Xcode.</li>
+        <li>Go to <span class="code inline">File → Add Packages…</span></li>
+        <li>Enter package URL:<br/>
+          <span class="code inline">https://github.com/hassanwasfy/paymentgateway_sdk</span>
+        </li>
+        <li>Select <span class="code inline">PaymentGateway</span> and add it to your target.</li>
+      </ol>
+
+      <h3>2) Import and use</h3>
+      <div class="note">
+        Replace the placeholders below with your SDK’s actual APIs. This avoids publishing incorrect method names.
+      </div>
+      <pre><code>import PaymentGateway
+
+// Example only — replace with actual SDK API
+// let sdk = PaymentGatewaySDK(/* ... */)
+// sdk.initialize()
+// sdk.startPayment(/* ... */)</code></pre>
+
+      <h3>3) How releases are wired</h3>
+      <p class="small">
+        Each SDK release publishes a zip asset in the DIST repo’s GitHub Releases:
+      </p>
+      <pre><code>https://github.com/hassanwasfy/paymentgateway_sdk/releases/download/v&lt;version&gt;/PaymentGateway.xcframework.zip</code></pre>
+
+      <p class="small">
+        The <span class="code inline">Package.swift</span> file is updated with:
+      </p>
+      <ul>
+        <li><span class="code inline">url</span> → points to the release zip asset</li>
+        <li><span class="code inline">checksum</span> → computed using <span class="code inline">swift package compute-checksum</span></li>
+      </ul>
+
+      <div class="danger">
+        If you manually edit the zip (even re-zip), the checksum changes and SPM will refuse it.
+        Always upload the exact zip used for checksum calculation.
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="versions" style="margin-top:18px;">
+    <div class="hd">
+      <strong>Versioning & Release Notes</strong>
+      <span class="pill">vX.Y.Z</span>
+    </div>
+    <div class="bd">
+      <h2>Versions</h2>
+
+      <h3>Tag format</h3>
+      <p class="small">
+        Releases use tags of the form <span class="code inline">vX.Y.Z</span>.
+        Example: <span class="code inline">v0.0.1</span>
+      </p>
+
+      <h3>Where to see available versions</h3>
+      <ul>
+        <li><strong>iOS:</strong> GitHub Releases in this repo</li>
+        <li><strong>Android:</strong> Maven metadata (example path):<br/>
+          <span class="code inline">.../maven/com/edfapay/paymentgateway/maven-metadata.xml</span>
+        </li>
+      </ul>
+
+      <div class="note">
+        Keep the artifact naming consistent (case-sensitive in URLs). Use one canonical artifactId and stick to it.
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="troubleshooting" style="margin-top:18px;">
+    <div class="hd">
+      <strong>Troubleshooting</strong>
+      <span class="pill">Common issues</span>
+    </div>
+    <div class="bd">
+      <h2>Troubleshooting</h2>
+
+      <h3>Android: “404” when opening the Maven base URL in a browser</h3>
+      <p class="small">
+        A browser may show 404 on folder URLs because GitHub Pages does not list directories.
+        This does not mean Maven is broken.
+      </p>
+      <ul>
+        <li class="small">Test a concrete file URL (e.g. a <span class="code inline">.pom</span> or <span class="code inline">maven-metadata.xml</span>).</li>
+        <li class="small">Gradle resolves files directly and does not require directory listing.</li>
+      </ul>
+
+      <h3>Android: dependency not found</h3>
+      <ul>
+        <li class="small">Confirm the repository is added before <span class="code inline">mavenCentral()</span>/<span class="code inline">google()</span> if you use repository modes that restrict resolution.</li>
+        <li class="small">Confirm the coordinate matches published artifactId exactly.</li>
+        <li class="small">If you use Gradle dependency caching, try <span class="code inline">./gradlew --refresh-dependencies</span>.</li>
+      </ul>
+
+      <h3>iOS: SPM “checksum mismatch”</h3>
+      <ul>
+        <li class="small">The checksum must match the exact uploaded zip.</li>
+        <li class="small">Re-zipping changes bytes → checksum changes.</li>
+        <li class="small">Ensure <span class="code inline">Package.swift</span> points to the correct tag and asset URL.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card" id="support" style="margin-top:18px;">
+    <div class="hd">
+      <strong>Support</strong>
+      <span class="pill">Contact</span>
+    </div>
+    <div class="bd">
+      <h2>Support</h2>
+      <p class="small">
+        For integration issues, open an issue in the distribution repository with:
+      </p>
+      <ul>
+        <li class="small">Platform (Android/iOS) + version</li>
+        <li class="small">Build logs / error output</li>
+        <li class="small">Minimal reproduction steps</li>
+      </ul>
+
+      <h3>Repository</h3>
+      <p class="small">
+        <span class="code inline">https://github.com/hassanwasfy/paymentgateway_sdk</span>
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="small">
+      <strong>PaymentGateway SDK</strong><br/>
+      This page is intended for SDK consumers. Replace placeholders with the SDK’s real API names as needed.
+    </div>
+  </footer>
+</main>
+</body>
+</html>
