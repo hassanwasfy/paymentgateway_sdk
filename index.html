@@ -236,7 +236,7 @@
         <h3>Android</h3>
         <pre><code>// settings.gradle(.kts) or build.gradle(.kts)
 repositories {
-  maven { url = uri("https://hassanwasfy.github.io/paymentgateway_sdk/maven/") }
+  maven { url = uri("https://hassanwasfy.github.io/paymentgateway_sdk/") }
   mavenCentral()
   google()
 }
@@ -277,7 +277,7 @@ dependencies {
             <tr>
               <td><strong>Android</strong></td>
               <td>Maven repository (GitHub Pages)</td>
-              <td><span class="code inline">https://hassanwasfy.github.io/paymentgateway_sdk/maven/</span></td>
+              <td><span class="code inline">https://hassanwasfy.github.io/paymentgateway_sdk/</span></td>
             </tr>
             <tr>
               <td><strong>iOS</strong></td>
@@ -290,7 +290,7 @@ dependencies {
         <h3>Verification</h3>
         <ul>
           <li><strong>Android:</strong> a direct file URL should download (example POM):<br/>
-            <span class="code inline">.../maven/com/edfapay/paymentgateway/&lt;version&gt;/...</span>
+            <span class="code inline">.../com/edfapay/paymentgateway/&lt;version&gt;/...</span>
           </li>
           <li><strong>iOS:</strong> the release asset must exist at:<br/>
             <span class="code inline">.../releases/download/v&lt;version&gt;/PaymentGateway.xcframework.zip</span>
@@ -315,7 +315,7 @@ dependencies {
         <div>
           <p class="small"><strong>Kotlin DSL</strong> (<span class="code inline">build.gradle.kts</span>)</p>
           <pre><code>repositories {
-  maven { url = uri("https://hassanwasfy.github.io/paymentgateway_sdk/maven/") }
+  maven { url = uri("https://hassanwasfy.github.io/paymentgateway_sdk/") }
   mavenCentral()
   google()
 }</code></pre>
@@ -323,7 +323,7 @@ dependencies {
         <div>
           <p class="small"><strong>Groovy</strong> (<span class="code inline">build.gradle</span>)</p>
           <pre><code>repositories {
-  maven { url "https://hassanwasfy.github.io/paymentgateway_sdk/maven/" }
+  maven { url "https://hassanwasfy.github.io/paymentgateway_sdk/" }
   mavenCentral()
   google()
 }</code></pre>
