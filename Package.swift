@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "PaymentGateway",
-            url: "https://github.com/hassanwasfy/paymentgateway_sdk/releases/download/v0.0.1/PaymentGateway.xcframework.zip",
-            checksum: "62b3746fe49ee1221cc274f1bcdcf9f09cccf16a6e762479fd12b13082cc55a8"
+            url: "https://github.com/hassanwasfy/paymentgateway_sdk/releases/download/0.0.1/PaymentGateway.xcframework.zip",
+            checksum: "6c8ff557fc303c82d65dc7d6677c24332bba6aab88222b8c5575e03b35e4389a"
         ),
     ]
 )
