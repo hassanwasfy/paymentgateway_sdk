@@ -15,8 +15,8 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "PaymentGateway",
-            url: "__EDFA_IOS_URL__",
-            checksum: "__EDFA_IOS_CHECKSUM__"
+            url: "https://github.com/hassanwasfy/paymentgateway_sdk/releases/download/0.0.3/PaymentGateway.xcframework.zip",
+            checksum: "6c8ff557fc303c82d65dc7d6677c24332bba6aab88222b8c5575e03b35e4389a"
         ),
     ]
 )
